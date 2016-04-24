@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+	<title>In Progress</title>
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+	<link rel="stylesheet" type="text/css" href="font.css" />
+	<style type="text/css">
+		body{
+			margin:0px;
+			font-family:badabb;
+			width: 100%;
+			color:white;
+		}
+		.blueBox{
+			position: fixed; /* or absolute */
+			top: 20%;
+			left: 50%;
+			z-index:1;
+			height:80px;
+			width:500px;
+			
+			background:#2ffaf5;
+			transform: translate(-50%, -50%);
+			
+		}
+		#headingText{
+			position: fixed; /* or absolute */
+  			top: -60%;
+  			left: 27%;
+
+			color:#5b82a0;
+			font-size:4em;
+		}	
+
+		#redBox{
+			position: fixed; /* or absolute */
+			top: 50%;
+			height:500px;
+			width:100%;
+			background:#d9155d;
+			transform: translate(0%, -50%);
+			text-align: center;
+		}
+		.yanoneFont{
+			font-family:yanone;
+		
+		}
+		#finishButton{
+			position: fixed; /* or absolute */
+			top: 82.5%;
+			left: 50%;
+			height:100px;
+			width:100px;
+			border-radius:200px 200px 200px 200px;
+			
+			background:#2ffaf5;
+			transform: translate(-50%, -50%);
+			
+		}
+		.checkmark {
+			position: absolute;
+			display:inline-block;
+			width: 220px;
+			height:220px;
+			transform: rotate(45deg);
+			top:-50%;
+			left:-50%;
+		}
+
+		.checkmark_stem {
+			position:absolute;
+			width:20px;
+			height:70px;
+			background-color:#d9155d;
+			left:90px;
+			top:70px;
+		}
+
+		.checkmark_kick {
+			position: absolute;
+			width:20px;
+			height:20px;
+			background-color:#d9155d;
+			left:-20px;
+			top:50px;
+		}
+		#orderText{
+			font-size:4em;
+		}
+	</style>
+</head>
+<body>
+	<div class = "blueBox"><p id="headingText">In Progress</p></div>
+	<div id="redBox">
+		<p id="orderText">
+			Chicken Soft Taco<br>
+			Soft Taco<br>
+		</p>
+		
+	</div>
+	<div id="finishButton">
+		<div class="checkmark">
+			<div class="checkmark_stem">
+				<div class="checkmark_kick">
+			
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

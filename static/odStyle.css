@@ -1,0 +1,47 @@
+@import url("font.css");
+body{
+	margin:0px;
+	font-family:yanone;
+	font-weight:lighter;
+	width: 100%;
+}
+
+#orderButton{
+	cursor: pointer;
+	position: fixed; /* or absolute */
+  	top: 50%;
+  	left: 50%;
+	height:250px;
+	width:500px;
+    border-radius: 500px 500px 0 0;
+    background:#d9155d;
+    transform: translate(-70%, -50%) rotate(-60deg);
+}
+#orderText{
+
+	position: fixed; /* or absolute */
+  	top: 20%;
+  	left: 40%;
+	transform: rotate(60deg);
+	color:white;
+	font-size:4em;
+}
+#deliverButton{
+	cursor: pointer;
+	position: fixed; /* or absolute */
+  	top: 66%;
+  	left: 67%;
+	height:250px;
+	width:500px;
+    border-radius: 500px 500px 0 0;
+    background:#2ffaf5;
+    transform: translate(-70%, -50%) rotate(120deg);
+}
+#deliverText{
+	position: fixed; /* or absolute */
+  	top: 20%;
+  	left: 35%;
+	transform: rotate(-120deg);
+	color:#5b82a0;
+	font-size:4em;
+}

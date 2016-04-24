@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Material Login Form</title>
+     <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    
+    
+    <link rel="stylesheet" href="{{ url_for('static',filename='reset.css') }}">
+
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+        <link rel="stylesheet" href="{{url_for('static',filename='style.css') }}">
+
+    
+    
+    
+  </head>
+
+  <body>
+    <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1388001791225933',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+    <script type="text/javascript" src="http:////cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<div class="container">
+  <div class="card"></div>
+  <div class="card">
+    <h1 class="title">Login</h1>
+    <form>
+      <div class="input-container">
+        <input type="text" id="Username_login" required="required"/>
+        <label for="Username">Username</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="Password_login" required="required"/>
+        <label for="Password">Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button id="Go" type="button" onclick="login()"><span>Go</span></button>
+      </div>
+      <div class="footer"><a href="#">Forgot your password?</a></div>
+    </form>
+  </div>
+  <div class="card alt">
+    <div class="toggle"></div>
+    <h1 class="title">Register
+      <div class="close"></div>
+    </h1>
+    <form>
+      <div class="input-container">
+        <input type="text" id="Username_signup" required="required"/>
+        <label for="Username">Username</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="Password_signup" required="required"/>
+        <label for="Password">Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="Repeat_password_signup" required="required"/>
+        <label for="Repeat Password">Repeat Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button id="Next" type="button" onclick="signup()"><span>Next</span></button>
+      </div>
+    </form>
+  </div>
+</div>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+        <script src="{{ url_for('static',filename='index.js') }}"></script>
+
+    <script>
+      var ref = new Firebase('https://gtfood.firebaseio.com/users');
+      var socket = io.connect('http://localhost:5000');
+      socket.on("connect", function () {  
+            console.log("Connected!");
+        });
+      console.log("coming here")
+      a= "udjnd"
+      socket.emit('testing', a);
+      function login() {
+        var username = $('#Username_login').val();
+        var password = $('#Password_login').val();
+        loginUser(username, password);
+      }
+
+      function signup() 
+      {
+        var username = $('#Username_signup').val();
+        var password = $('#Password_signup').val();
+        var repeat_password = $('#Repeat_password_signup').val();
+
+        if(password != repeat_password)
+        {
+          console.log(password);
+          console.log(repeat_password);
+          alert("Passwords don't match");
+
+        }
+        else
+        {
+          ref.createUser(
+          {
+            email    : username,
+            password : password
+          }, 
+          function(error, userData) 
+          {
+            if (error) 
+            {
+              alert("Error creating user:", error);
+            } 
+            else 
+            {
+              console.log("Successfully created user account with uid:", userData.uid);
+              var uid = userData.uid.toString();
+              var dict = {};
+              dict[uid] = {"email": username};
+              ref.update(dict);
+              loginUser(username, password);
+            }
+          });
+        }
+      }
+
+
+      function loginUser(username, password)
+      {
+        ref.authWithPassword({
+          email    : username,
+          password : password
+        }, function(error, authData) {
+          if (error) {
+            alert("Login Failed!", error);
+          } else {
+            console.log("Authenticated successfully with payload:", authData);
+            socket.emit("Authenticated", authData["token"])
+            var cookieString1 = "token=" + authData["token"] + ";" + "path=/"
+            var cookieString2 = "uid=" + authData["uid"]+";" + "path=/"
+            var cookieString3 = "email="+username + ";" + "path=/"
+            document.cookie=cookieString1;
+            document.cookie = cookieString2;
+            document.cookie= cookieString3;
+            console.log("====================")
+            console.log(getCookie("uid"))
+
+            window.location.href = "order_deliver/" + authData["token"]          
+          }
+        });
+      }
+
+      function getCookie(cname) 
+      {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) 
+        {
+          console.log(ca[i])
+          var c = ca[i];
+          while (c.charAt(0)==' ') 
+            {c = c.substring(1);}
+          if (c.indexOf(name) == 0) 
+          {
+            return c.substring(name.length,c.length);
+          }
+        }
+        return "";
+      }
+    </script>
+    
+    
+    
+  </body>
+</html>

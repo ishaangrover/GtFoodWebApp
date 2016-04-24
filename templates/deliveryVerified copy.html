@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+	<title>Finding Deliverer</title>
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+	<link rel="stylesheet" type="text/css" href="font.css" />
+	<style type="text/css">
+		body{
+			margin:0px;
+			font-family:badabb;
+			width: 100%;
+			color:#5b82a0;
+		}
+
+		#statusCircle{
+			position: fixed; /* or absolute */
+			top: 50%;
+			left: 50%;
+			height:500px;
+			width:500px;
+			border-radius: 500px 500px 500px 500px;
+			background:#2ffaf5;
+			transform: translate(-50%, -50%);
+		}
+		#waitText{
+			position: fixed; /* or absolute */
+			top: 5%;
+			left: 13%;
+			text-align: center;
+		}
+	
+		#verifyButton{
+			position: fixed; /* or absolute */
+			top: 90%;
+			left: 50%;
+			height:100px;
+			width:500px;
+			
+			background:#d9155d;
+			transform: translate(-50%, -50%);
+			
+		}
+		#verifyText{
+			position: fixed; /* or absolute */
+  			top: -15%;
+  			left: 27%;
+
+			color:white;
+			font-size:3em;
+		}
+			
+			
+	</style>
+</head>
+<body>
+	<div id="statusCircle">
+		<p id="waitText" style="font-size:3em">
+			<span style="font-size:2.3em">Delivery<br>Verified!</span><br>
+			Verifying Payment....
+		<p>
+	</div>
+</body>
+</html>

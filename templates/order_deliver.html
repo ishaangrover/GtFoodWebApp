@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+	<title>Order/Deliver</title>
+       <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='odStyle.css') }}">
+</head>
+<body>
+	<div id="orderButton"><p id="orderText">ORDER<p></div>
+	<div id="deliverButton"><p id="deliverText">DELIVER<p></div>
+  <script type="text/javascript" src="http:////cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script>
+      var currentToken = getCookie("token");
+      var socket = io.connect('http://localhost:5000/order_deliver/');
+      var ref = new Firebase('https://gtfood.firebaseio.com/users');
+      $('#orderButton').click(function() {
+        window.location.href = "subway/" + currentToken;
+      });
+
+      function getCookie(cname) 
+      {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) 
+        {
+          console.log(ca[i])
+          var c = ca[i];
+          while (c.charAt(0)==' ') 
+            {c = c.substring(1);}
+          if (c.indexOf(name) == 0) 
+          {
+            return c.substring(name.length,c.length);
+          }
+        }
+        return "";
+      }
+  </script>
+	
+</body>
+</html>

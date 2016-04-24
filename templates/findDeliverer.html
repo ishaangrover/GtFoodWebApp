@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+	<title>Finding Deliverer</title>
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+	<link rel="stylesheet" type="text/css" href="font.css" />
+	<style type="text/css">
+		body{
+			margin:0px;
+			font-family:badabb;
+			width: 100%;
+			color:white;
+		}
+
+		#searchCircle{
+			position: fixed; /* or absolute */
+			top: 50%;
+			left: 50%;
+			height:500px;
+			width:500px;
+			border-radius: 500px 500px 500px 500px;
+			background:#d9155d;
+			transform: translate(-50%, -50%);
+		}
+		#waitText{
+			position: fixed; /* or absolute */
+			top: 5%;
+			left: 16%;
+			text-align: center;
+		}
+		.yanoneFont{
+			font-family:yanone;
+		
+		}
+		#cancelButton{
+			position: fixed; /* or absolute */
+			top: 90%;
+			left: 50%;
+			height:100px;
+			width:500px;
+			
+			background:#2ffaf5;
+			transform: translate(-50%, -50%);
+			
+		}
+		#cancelText{
+			position: fixed; /* or absolute */
+  			top: -15%;
+  			left: 27%;
+
+			color:#5b82a0;
+			font-size:3em;
+		}
+			
+			
+	</style>
+</head>
+<body>
+	<div id="searchCircle">
+		<p id="waitText" style="font-size:4em">
+			<span class="yanoneFont">SEARCHING</span><br>
+			<span style = "font-size:.5em"><strong>FOR A </strong></span><br>
+			<strong style="font-size:2em"><i>HELPFUL</i></strong><br>
+			 FRIEND
+		<p>
+	</div>
+	<div id="cancelButton"><p id="cancelText">CANCEL ORDER</p></div>
+</body>
+</html>

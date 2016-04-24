@@ -1,0 +1,15 @@
+
+@font-face {
+    font-family: yanone;
+    src: url(YanoneKaffeesatz-Thin.ttf);
+}
+@font-face {
+    font-family: yanone;
+    src: url(YanoneKaffeesatz-Bold.ttf);
+    font-weight: bold;
+}
+@font-face {
+    font-family: badabb;
+    src: url(BADABB.ttf);
+    font-weight: bold;
+}
