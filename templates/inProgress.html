@@ -8,6 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.js"></script>
     <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script type="text/javascript" src="https://js.stripe.com/v1/"></script>
 	
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='font.css') }}" />
 	<style type="text/css">
@@ -116,6 +117,7 @@
 
 
 	<script>
+		Stripe.setPublishableKey('pk_test_0KPlH4Hw2FUzR7bakDWXZqr1');
          var socket = io.connect('http://localhost:5000/');
           var ref = new Firebase('https://gtfood.firebaseio.com/users');
           var userRef = ref.child(getCookie("uid"));
@@ -127,15 +129,27 @@
 
            var split_array = window.location.href.split('/')
            var orderer_uid = split_array[split_array.length -1];
-          var new_ref = new Firebase("https://gtfood.firebaseio.com/status_table").child(orderer_uid).child("status");
+          var new_ref = new Firebase("https://gtfood.firebaseio.com/status_table").child(orderer_uid);
 	new_ref.on("value", function(snapshot) {
-		var value = snapshot.val();
+		var main_dict = snapshot.val();
+		var value = main_dict["status"]
 		console.log("Value is: " + value);
 		if (value == "D") {
 				new_ref.off();
 				var cookieString4 = "orderer_uid="+orderer_uid + ";" + "path=/"
 				document.cookie=cookieString4;
-				window.location.href = "/order_complete/" + getCookie("token")
+				userRef.once('value', function(snap) {
+					var d = snap.val();
+					var customer_id = d["customer_stripe_id"]
+					var amount_to_be_paid = main_dict["total"] - main_dict["ourFee"]
+					var email = d["email"]
+					var temp = {'customer_id': customer_id, 'amount_to_be_paid': amount_to_be_paid, 'currency': 'usd', 'email': email};
+					// console.log('TEMP :' + temp)
+					socket.emit('pay_deliverer', {'details': [customer_id, amount_to_be_paid, 'usd', email]})
+					console.log('CREATED TRANSFER');
+					setTimeout(function(){window.location.href = "/order_complete/" + getCookie("token")}, 1000);
+				})
+				
 			}
 	});
 

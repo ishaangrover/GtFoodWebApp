@@ -233,9 +233,9 @@
     			console.log("CUSTOMER ID: " + snapshot_dict["customer_stripe_id"])
     			socket.emit('charge', {"c_id":snapshot_dict["customer_stripe_id"], "amount":total});
     			console.log("RETURNED FROM EMIT")
-    			setTimeout(go_to_stripe, 5000, "/waiting/");
+    			setTimeout(go_to_stripe, 1000, "/waiting/");
     		} else {
-    			setTimeout(go_to_stripe, 5000, "/stripe/");
+    			setTimeout(go_to_stripe, 1000, "/stripe/");
     		}
 
     		// dict["ordererName"] = name;

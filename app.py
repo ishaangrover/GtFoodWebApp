@@ -135,6 +135,29 @@ def delivery_complete(token):
 	else:
 		return "IN delivery complete"
 
+@socketio.on('pay_deliverer')
+def pay_deliverer(data):
+	print 'BEFORE FORMATTING: {}'.format(data)
+	data = ast.literal_eval(json.dumps(data))
+	print 'TRANSFER DATA: {}'.format(data)
+	customer_id, amount, currency, email = data['details']
+	print 'RETREIVING CUSTOMER'
+	customer = stripe.Customer.retrieve(customer_id)
+	print 'CUSTOMER OBJ {}'.format(customer)
+	card_id = customer.default_source
+	print 'CARD_ID {}'.format(card_id)
+
+	try:
+		transfer = stripe.Transfer.create(
+			amount = int(amount*100),
+			currency=currency,
+			destination=card_id,
+			description='Transfer for {}'.format(email)
+			)
+	except:
+		raise
+
+	print 'CREATED TRANSFER FOR {} with transfer id {}'.format(email, transfer.id)
 
 @app.route('/menu/<token>')
 def menu(token):
