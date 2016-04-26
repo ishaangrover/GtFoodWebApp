@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Order Complete</title>
+	<title>Delivery Complete</title>
 	
 	<meta charset="utf-8" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -93,7 +93,7 @@
 <body>
 	<div id="redBox">
 		<p id="waitText" style="font-size:4em">
-			ORDER COMPLETE!<BR>
+			DELIVERY COMPLETE!<BR>
 			<span class="yanoneFont">PLEASE RATE</span><br>
 			 <span id="userName"></span>
 		<p>
@@ -121,28 +121,34 @@
             console.log("Connected!");
         });
 
-              var orderer_uid = getCookie("orderer_uid");
-              ref.child(orderer_uid).child("name").once('value', function (snapshot) {
-              		name = snapshot.val()
-              		$('#userName')[0].innerText = name
+              
+              userRef_status_table.child("delivererUID").once('value', function(snapshot) {
+              		var delivererUID = snapshot.val()
+              		ref.child(delivererUID).child("name").once('value', function(snap) {
+	              		$('#userName')[0].innerText = snap.val()
+              		})
               });
               
               function finishFunc() {
-              	ref.child(orderer_uid).once('value', function (snapshot) {
-              		dict = snapshot.val()
-              		num_ratings = dict["num_ratings"]
-              		rating = dict["rating"]
-              		console.log("NUM RATINGS: " + num_ratings) 
-              		console.log("CURRENT RATING: " + rating)
-              		var slider = 5 - parseFloat($('#s1')[0].value)
-              		console.log("SLIDER: " + slider)
+              	userRef_status_table.child("delivererUID").once('value', function(snapshot) {
+              		var d_UID = snapshot.val();
+              		ref.child(d_UID).once('value', function (snap) {
+	              		dict = snap.val()
+	              		num_ratings = dict["num_ratings"]
+	              		rating = dict["rating"]
+	              		console.log("NUM RATINGS: " + num_ratings) 
+	              		console.log("CURRENT RATING: " + rating)
+	              		var slider = 5 - parseFloat($('#s1')[0].value)
+	              		console.log("SLIDER: " + slider)
 
-              		new_rating = (rating + slider + 0.0)/(num_ratings + 1)
-              		console.log("NEW RATING: " + new_rating)
-              		ref.child(orderer_uid).update({'num_ratings': num_ratings + 1, 'rating': new_rating});
-              		console.log('NEW RATING :' + new_rating);
-              		setTimeout(function(){window.location.href = '/order_deliver/' + getCookie("token")}, 1000);
-              	});
+	              		new_rating = (rating + slider + 0.0)/(num_ratings + 1)
+	              		console.log("NEW RATING: " + new_rating)
+	              		ref.child(d_UID).update({'num_ratings': num_ratings + 1, 'rating': new_rating});
+	              		console.log('NEW RATING :' + new_rating);
+	              		setTimeout(function(){window.location.href = '/order_deliver/' + getCookie("token")}, 1000);
+	              	});
+              	})
+              	
 
               } 
 

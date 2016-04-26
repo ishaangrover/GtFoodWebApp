@@ -6,8 +6,11 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	{
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+	        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.js"></script>
+	            <script type="text/javascript" src="{{url_for('static',filename='jquery.min.js') }}"></script>
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='font.css') }}" />
+
 	<style type="text/css">
 		body{
 			margin:0px;
@@ -64,6 +67,39 @@
 			ON ITS WAY
 		<p>
 	</div>
-	<div id="verifyButton"><p id="verifyText">VERIFY ORDER</p></div>
+	<div id="verifyButton" onclick="changeToD()"><p id="verifyText">VERIFY ORDER</p></div>
+
+	<script type="text/javascript">
+		var socket = io.connect('http://localhost:5000/');
+          var ref = new Firebase('https://gtfood.firebaseio.com/users');
+          var userRef = ref.child(getCookie("uid"));
+          var ref_status_table = new Firebase("https://gtfood.firebaseio.com/status_table");
+          var userRef_status_table = ref_status_table.child(getCookie("uid")); 
+                socket.on("connect", function () {  
+            console.log("Connected!");
+        });
+
+          function changeToD() {
+          	 userRef_status_table.update({"status": "D"})
+          	 console.log("STATUS IS D")
+          	 setTimeout(function(){window.location.href = "/delivery_complete/" + getCookie("token");}, 1000);
+          }
+
+          function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                console.log(ca[i])
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+	</script>
 </body>
 </html>

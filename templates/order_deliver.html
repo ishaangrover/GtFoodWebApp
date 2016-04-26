@@ -20,12 +20,22 @@
       var currentToken = getCookie("token");
       var socket = io.connect('http://localhost:5000/order_deliver/');
       var ref = new Firebase('https://gtfood.firebaseio.com/users');
+
+      var userRef = ref.child(getCookie("uid"));
+      var ref_status_table = new Firebase("https://gtfood.firebaseio.com/status_table");
+      var userRef_status_table = ref_status_table.child(getCookie("uid")); 
+            socket.on("connect", function () {  
+        console.log("Connected!");
+    });
+
       $('#orderButton').click(function() {
-        window.location.href = "/menu/" + currentToken;
+        userRef.update({"status": "O"})
+        setTimeout(function(){window.location.href = "/menu/" + currentToken;}, 1000);
       });
 
       $('#deliverButton').click(function() {
-        window.location.href = "/pending_orders/" + currentToken;
+        userRef.update({"status": "D"})
+        setTimeout(function(){window.location.href = "/pending_orders/" + currentToken;}, 1000);
       });
 
       function getCookie(cname) 

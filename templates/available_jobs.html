@@ -107,9 +107,10 @@
     			var uid_array = [];
     			for (var uid in big_dict) {
     				var small_dict = big_dict[uid];
-    				uid_array.push(uid);
+    				
     				if (small_dict["status"] == "O") {
     					array.push(small_dict);
+                        uid_array.push(uid);
     				}
     			}
     			console.log(array)
@@ -176,9 +177,14 @@
 				    	userRef.once('value', function(snap) {
 				    		snapshot_dict = snap.val()
 				    		if (snapshot_dict["customer_stripe_id"] != "notSet") {
-				    			console.log(this_id)
-				    			ref_status_table.child(uid_array[this_id]).update({'delivererUID': getCookie('uid')})
+				    			console.log(uid_array[this_id])
+                                ref_status_table.off();
+
+                                setTimeout(function(){ref_status_table.child(uid_array[this_id]).update({'delivererUID': getCookie('uid'), 'status' : 'A'})}, 500);
+				    			
+                                isInitial = true;
 				    			console.log("DELIVERER UID ADDED")
+                                setTimeout(function(){window.location.href = "/in_progress/" + getCookie("token") + "/" + uid_array[this_id]}, 1000);
 
 				    		} else {
 				    			console.log("GOING TO ADD CARD")

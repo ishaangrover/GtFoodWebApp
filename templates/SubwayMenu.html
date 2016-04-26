@@ -198,7 +198,7 @@
         var rating = "";
         var source_address = $("#dormList option:selected").text();
         var currentToken = getCookie("token");
-        var socket = io.connect('http://localhost:5000/order_deliver/menu/');
+        var socket = io.connect('http://localhost:5000/');
         var ref = new Firebase('https://gtfood.firebaseio.com/users');
         var userRef = ref.child(getCookie("uid"));
         var ref_status_table = new Firebase("https://gtfood.firebaseio.com/status_table");
@@ -212,11 +212,13 @@
     			"foodItems":stuffToEat,
     			"restaurant": "Subway",
     			"status": "O",
-    			"total": total
+    			"total": total,
+    			"ourFee": commission
+
     	}
 
     	var cust_id_exists = false;
-        userRef.on("value", function(snapshot) {
+        userRef.once("value", function(snapshot) {
         	console.log("SNAPSHOT")
     		console.log(snapshot.val()); 
     		snapshot_dict=snapshot.val();
@@ -224,14 +226,16 @@
     		var rating = snapshot_dict["rating"];
     		dict["ordererName"] = name
     		dict["ordererRating"]=rating
-    		userRef_status_table.set(dict);
+    		userRef_status_table.update(dict);
     		if(snapshot_dict["customer_stripe_id"] != "notSet")
     		{
-    			// cust_id_exists = true;
+    			console.log("SENDING EMIT CHARGE")
+    			console.log("CUSTOMER ID: " + snapshot_dict["customer_stripe_id"])
     			socket.emit('charge', {"c_id":snapshot_dict["customer_stripe_id"], "amount":total});
-    			setTimeout(go_to_stripe, 2000, "/waiting/");
+    			console.log("RETURNED FROM EMIT")
+    			setTimeout(go_to_stripe, 5000, "/waiting/");
     		} else {
-    			setTimeout(go_to_stripe, 2000, "/stripe/");
+    			setTimeout(go_to_stripe, 5000, "/stripe/");
     		}
 
     		// dict["ordererName"] = name;
