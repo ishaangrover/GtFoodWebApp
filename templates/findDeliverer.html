@@ -6,8 +6,10 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	
-	<link rel="stylesheet" type="text/css" href="font.css" />
+	    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+	        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.js"></script>
+	            <script type="text/javascript" src="{{url_for('static',filename='jquery.min.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='font.css') }}" />
 	<style type="text/css">
 		body{
 			margin:0px;
@@ -68,6 +70,66 @@
 			 FRIEND
 		<p>
 	</div>
-	<div id="cancelButton"><p id="cancelText">CANCEL ORDER</p></div>
+	<div id="cancelButton"><p style="cursor:pointer;" id="cancelText">CANCEL ORDER</p></div>
+
+
+
+	<script type="text/javascript">
+
+	var socket = io.connect('http://localhost:5000/');
+          var ref = new Firebase('https://gtfood.firebaseio.com/users');
+          var userRef = ref.child(getCookie("uid"));
+          var ref_status_table = new Firebase("https://gtfood.firebaseio.com/status_table");
+          var userRef_status_table = ref_status_table.child(getCookie("uid")); 
+                socket.on("connect", function () {  
+            console.log("Connected!");
+        });
+
+    var new_ref = new Firebase("https://gtfood.firebaseio.com/status_table").child(getCookie("uid")).child("status");
+	new_ref.on("value", function(snapshot) {
+		var value = snapshot.val();
+		console.log("Value is: " + value);
+		if (value == "A") {
+				new_ref.off();
+				window.location.href = "/deliveryOnWay/" + getCookie("token")
+			}
+	});
+
+	
+	$("#cancelButton").click(function () {
+			userRef.once("value", function(snapshot) {
+				var customer_id = snapshot.val()["customer_stripe_id"]
+				console.log("THE CUSTOMER ID: " + customer_id);
+				socket.emit("refund", customer_id)
+				userRef_status_table.remove();
+				new_ref.off()
+			
+    			window.location.href = "/menu/" + getCookie("token")
+			});
+			
+		});
+
+
+
+
+
+       function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                console.log(ca[i])
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+
+	</script>
 </body>
 </html>

@@ -6,12 +6,12 @@
      <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
     
     
-    <link rel="stylesheet" href="{{ url_for('static',filename='reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='reset_login.css') }}">
 
     <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
 <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
-        <link rel="stylesheet" href="{{url_for('static',filename='style.css') }}">
+        <link rel="stylesheet" href="{{url_for('static',filename='style_login.css') }}">
 
     
     
@@ -20,13 +20,6 @@
 
   <body>
     <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1388001791225933',
-      xfbml      : true,
-      version    : 'v2.6'
-    });
-  };
 
   (function(d, s, id){
      var js, fjs = d.getElementsByTagName(s)[0];
@@ -68,6 +61,11 @@
       <div class="close"></div>
     </h1>
     <form>
+        <div class="input-container">
+        <input type="text" id="name_signup" required="required"/>
+        <label for="Name">Name</label>
+        <div class="bar"></div>
+      </div>
       <div class="input-container">
         <input type="text" id="Username_signup" required="required"/>
         <label for="Username">Username</label>
@@ -95,7 +93,7 @@
 
     <script>
       var ref = new Firebase('https://gtfood.firebaseio.com/users');
-      var socket = io.connect('http://localhost:5000');
+      var socket = io.connect('http://localhost:5000/');
       socket.on("connect", function () {  
             console.log("Connected!");
         });
@@ -110,9 +108,11 @@
 
       function signup() 
       {
+        var name = $('#name_signup').val();
         var username = $('#Username_signup').val();
         var password = $('#Password_signup').val();
         var repeat_password = $('#Repeat_password_signup').val();
+        // console.log(name)
 
         if(password != repeat_password)
         {
@@ -139,7 +139,7 @@
               console.log("Successfully created user account with uid:", userData.uid);
               var uid = userData.uid.toString();
               var dict = {};
-              dict[uid] = {"email": username};
+              dict[uid] = {"email": username, "name": name, "uid":uid, "status": "N", "rating":5};
               ref.update(dict);
               loginUser(username, password);
             }
@@ -165,10 +165,9 @@
             document.cookie=cookieString1;
             document.cookie = cookieString2;
             document.cookie= cookieString3;
-            console.log("====================")
+            // console.log("====================")
             console.log(getCookie("uid"))
-
-            window.location.href = "order_deliver/" + authData["token"]          
+            window.location.href = "/order_deliver/" + authData["token"]          
           }
         });
       }
@@ -190,9 +189,8 @@
         }
         return "";
       }
+
+
     </script>
-    
-    
-    
   </body>
 </html>

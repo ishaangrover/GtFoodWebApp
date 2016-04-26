@@ -21,7 +21,11 @@
       var socket = io.connect('http://localhost:5000/order_deliver/');
       var ref = new Firebase('https://gtfood.firebaseio.com/users');
       $('#orderButton').click(function() {
-        window.location.href = "subway/" + currentToken;
+        window.location.href = "/menu/" + currentToken;
+      });
+
+      $('#deliverButton').click(function() {
+        window.location.href = "/pending_orders/" + currentToken;
       });
 
       function getCookie(cname) 
