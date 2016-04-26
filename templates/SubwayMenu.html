@@ -1,0 +1,282 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Subway Menu</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.js"></script>
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='font.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='tables.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='foodMenu.css') }}" />
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="{{url_for('static',filename='reset.css') }}">
+    <!-- CSS reset -->
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css') }}">
+    <!-- CSS reset -->
+    <script type="text/javascript" src="{{url_for('static',filename='modernizr.js') }}"></script>
+    <!-- Modernizr -->
+    <script type="text/javascript" src="{{url_for('static',filename='jquery.min.js') }}"></script>
+
+    <script>
+    </script>
+</head>
+
+<body>
+    <header>
+
+        <div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
+    </header>
+    <table class="pure-table" style=" position:absolute; left:400px; top:100px;font-size:2em;cursor:pointer;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Item</th>
+                <th>Price</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class="pure-table-odd">
+                <td>1</td>
+                <td>BLT</td>
+                <td>$6.00</td>
+            </tr>
+
+            <tr class="menuItem">
+                <td>2</td>
+                <td>Veggie Patty</td>
+                <td>$7.00</td>
+            </tr>
+            <tr class="pure-table-odd">
+                <td>3</td>
+                <td>Subway Club</td>
+                <td>$6.75</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Turkey Breast</td>
+                <td>$6.00</td>
+            </tr>
+            <tr class="pure-table-odd">
+                <td>5</td>
+                <td>Meatball Marinara</td>
+                <td>$5.25</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+    <div id="dormList" style="cursor:pointer;">
+        <select>
+		<option value="northAveN">North Avenue North</option>
+		<option value="northAveW">North Avenue West</option>
+  		<option value="northAveE">North Avenue East</option>
+  		<option value="northAveS">North Avenue South</option>
+	</select>
+    </div>
+    <div id="finishButton" onclick="doStuff()" style="cursor:pointer;">
+        <div class="checkmark">
+            <div class="checkmark_stem">
+                <div class="checkmark_kick">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="cd-shadow-layer"></div>
+
+    <div id="cd-cart">
+        <h2>Cart</h2>
+        <ul id="items" class="cd-cart-items">
+
+        </ul>
+        <!-- cd-cart-items -->
+
+        <div class="cd-cart-total">
+            <p>Total <span id="total_price">$39.96</span></p>
+        </div>
+        <!-- cd-cart-total -->
+
+        <a href="#0" class="checkout-btn">Checkout</a>
+
+    </div>
+    <!-- cd-cart -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{{url_for('static',filename='main.js') }}"></script>
+    <!-- Gem jQuery -->
+    <script type="text/javascript">
+        $('.pure-table tr').click(function(e) {
+            $('.pure-table tr').removeClass('highlighted');
+            $(this).toggleClass('highlighted');
+            var item = $(this).children(':nth-child(2)').text();
+            var price = $(this).children(':nth-child(3)').text();
+            var $prefix = $("<span class=\"cd-qty\">1x </span>");
+            var $fin = $("<li> </li>").text(item);
+            $fin = $fin.prepend($prefix);
+            price = $("<div class=\"cd-price\"></div>").text(price);
+            $fin = $fin.append(price);
+            var $suffix = $("<a href=\"#0\" class=\"cd-item-remove cd-img-replace\">Remove</a>");
+            $fin = $fin.append($suffix);
+            $("ul").append($fin);
+            $suffix.on('click', function() {
+                $(this).closest('li').remove();
+                calcTotal();
+            });
+            calcTotal();
+            $("#cd-cart-trigger").click();
+        });
+        calcTotal();
+
+        function calcTotal() {
+            var total = 0.0;
+            $("#items").children().each(function(index, value) {
+                console.log($(value).children()[0])
+                var priceVal = $(value).children()[1].innerText;
+                var actualPrice = parseFloat(priceVal.substr(1));
+                total = total + actualPrice;
+            });
+            $("#total_price").text("$" + parseFloat(Math.round(total * 100) / 100).toFixed(2));
+            return parseFloat(Math.round(total * 100) / 100).toFixed(2);
+        }
+
+        $(".cd-item-remove").on("click", (function() {
+            //alert("I am alive");
+            $(this).closest('li').remove();
+            calcTotal();
+        }));
+        $(".cd-item-remove").on("click", (function() {
+            alert("I am alive");
+            $(this).closest('li').remove();
+        }));
+
+        var stuffToEat = []
+        function doStuff() {
+        var lis = document.getElementById("items").getElementsByTagName("li");
+        for (i = 0; i < lis.length; i++) {
+            text = lis[i].innerText
+            console.log(text)
+            j = 0;
+            var a = false
+            string = "";
+            while (j < text.length) {
+                j++;
+                if (text[j] == " ") {
+                    a = true
+                    string += " "
+                    continue;
+                }
+                if (text[j] == "$") {
+                    a = false
+                }
+
+
+                if (a) {
+                    string += text[j]
+                }
+
+            }
+            string = string.replace(/^\s+|\s+$/g, "");
+            stuffToEat.push(string);
+
+        }
+        console.log(stuffToEat);
+        total = calcTotal();
+        total = parseFloat(total)
+        commission = total * 0.10
+        total = total+ 2.0 + commission;
+
+
+        var name = "";
+        var rating = "";
+        var source_address = $("#dormList option:selected").text();
+        var currentToken = getCookie("token");
+        var socket = io.connect('http://localhost:5000/order_deliver/menu/');
+        var ref = new Firebase('https://gtfood.firebaseio.com/users');
+        var userRef = ref.child(getCookie("uid"));
+        var ref_status_table = new Firebase("https://gtfood.firebaseio.com/status_table");
+        var userRef_status_table = ref_status_table.child(getCookie("uid")); 
+
+
+        dict = {
+    			"deliveryFee":2.00,
+    			"deliveryLocation":source_address,
+    			"email": getCookie("email"),
+    			"foodItems":stuffToEat,
+    			"restaurant": "Subway",
+    			"status": "O",
+    			"total": total
+    	}
+
+    	var cust_id_exists = false;
+        userRef.on("value", function(snapshot) {
+        	console.log("SNAPSHOT")
+    		console.log(snapshot.val()); 
+    		snapshot_dict=snapshot.val();
+    		var name = snapshot_dict["name"];
+    		var rating = snapshot_dict["rating"];
+    		dict["ordererName"] = name
+    		dict["ordererRating"]=rating
+    		userRef_status_table.set(dict);
+    		if(snapshot_dict["customer_stripe_id"] != "notSet")
+    		{
+    			// cust_id_exists = true;
+    			socket.emit('charge', {"c_id":snapshot_dict["customer_stripe_id"], "amount":total});
+    			setTimeout(go_to_stripe, 2000, "/waiting/");
+    		} else {
+    			setTimeout(go_to_stripe, 2000, "/stripe/");
+    		}
+
+    		// dict["ordererName"] = name;
+    	});
+
+    	
+
+     //    next_screen = ""
+    	// if(cust_id_exists)
+    	// {
+    	// 	next_screen = "stripe/waiting/"
+    	// }
+    	// else
+    	// {
+    	// 	next_screen = "stripe/"
+    	// }
+    	// setTimeout(go_to_stripe, 1000, next_screen);
+
+    };
+
+
+	function go_to_stripe(next_screen)
+	{
+		// console.log("nothing")
+		window.location.href = next_screen + getCookie("token")
+	}
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                console.log(ca[i])
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+	<title>Food Menu</title>
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<style type="text/css">
+		#topicmenu ul{
+			background-color:#d9155d;
+			padding:0 0 0 5px ;
+			margin:0;
+			height:48px;
+			color:white;
+			}
+		#topicmenu li{
+			list-style:none;
+			float:left;
+			
+			padding:0 6px 0 50px;
+		}
+		html, body {
+  			height: 100%;
+  			overflow: auto;
+		}
+		iframe {
+			display: block;       /* iframes are inline by default */
+	
+			border: none;         /* Reset default border */
+			height: 100%;        /* Viewport-relative units */
+			width: 100%;
+			scrolling="no"
+		}
+		
+	</style>
+	<script type="text/javascript" src="{{url_for('static',filename='jquery.min.js')}}"></script>
+
+
+
+
+
+</head>
+<body>
+	<div id="topicmenu">
+		<ul>
+			<li ><img id="subwayButton" src="{{url_for('static',filename='subwaylogo.jpg')}}"style="width:150px;height:45px;"</li>
+			<li ><img id="chicFilAButton" src="{{url_for('static',filename='chicFillAlogo.png')}}"style="width:100px;height:45px;" onclick="$('#menuFrame').attr('src','chicFillAMenu.html');"></li>
+			<li ><img id="tacoBellButton" src="{{url_for('static',filename='tacoBelllogo.jpg')}}"style="width:100px;height:45px;" onclick="$('#menuFrame').attr('src','tacoBellMenu.html');"></li>
+		</ul>
+	</div>
+		<table class="pure-table" style=" position:absolute; left:400px;font-size:2em;">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th>Price</th>
+            
+        </tr>
+        </thead>
+
+    <tbody>
+        <tr class="pure-table-odd" >
+            <td>1</td>
+            <td>BLT</td>
+            <td>$6.00</td>
+        </tr>
+
+        <tr class="menuItem">
+            <td>2</td>
+            <td >Veggie Patty</td>
+            <td>$7.00</td>
+        </tr>
+        <tr  class="pure-table-odd" >
+            <td>3</td>
+            <td>Subway Club</td>
+            <td>$6.75</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Turkey Breast</td>
+            <td>$6.00</td>
+        </tr>
+        <tr  class="pure-table-odd" >
+            <td>5</td>
+            <td>Meatball Marinara</td>
+            <td>$5.25</td>
+        </tr>
+
+
+    </tbody>
+</table>
+	<div id="menu"></div>
+	<script>
+		// $('#menuFrame').load('SubwayMenu.html');
+	</script>
+</body>
+</html>

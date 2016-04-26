@@ -1,0 +1,110 @@
+<link rel="stylesheet" type="text/css" href="font.css" />
+<link rel="stylesheet" type="text/css" href="tables.css" />
+
+		body{
+			margin:100px;
+			font-family:yanone;
+			width: 100%;
+			color:white;
+		}
+		.blueBox{
+			position: fixed; /* or absolute */
+			top: 20%;
+			left: 50%;
+			z-index:1;
+			height:80px;
+			width:500px;
+			
+			background:#2ffaf5;
+			transform: translate(-50%, -50%);
+			
+		}
+		#headingText{
+			position: fixed; /* or absolute */
+  			top: -60%;
+  			left: 27%;
+
+			color:#5b82a0;
+			font-size:4em;
+		}	
+
+		.redBox{
+			position: fixed; /* or absolute */
+			left: 0;
+			height:100%;
+			width:200px;
+			background:#d9155d;
+			transform: translate(0%, -50%);
+			text-align: center;
+		}
+		.yanoneFont{
+			font-family:yanone;
+		
+		}
+		#dormList{
+			position: fixed; /* or absolute */
+			top: 72.5%;
+			left: 40%;
+		}
+		#finishButton{
+			position: fixed; /* or absolute */
+			top: 85.5%;
+			left: 45%;
+			height:90px;
+			width:90px;
+			border-radius:90px 90px 90px 90px;
+			
+			background:#2ffaf5;
+			transform: translate(-50%, -50%);
+			
+		}
+		.checkmark {
+			position: absolute;
+			display:inline-block;
+			width: 220px;
+			height:220px;
+			transform: rotate(45deg);
+			top:-50%;
+			left:-50%;
+		}
+
+		.checkmark_stem {
+			position:absolute;
+			width:20px;
+			height:60px;
+			background-color:#d9155d;
+			left:80px;
+			top:80px;
+		}
+
+		.checkmark_kick {
+			position: absolute;
+			width:20px;
+			height:20px;
+			background-color:#d9155d;
+			left:-20px;
+			top:40px;
+		}
+		#resturants{
+			font-size:2em;
+			color:white;
+			text-align:center;
+			position:absolute;
+			top:400px;
+			left:20px;
+		}
+		a{
+			color:white;
+		}
+		
+
+		.pure-table tr {
+    		color: black;
+		}
+		.pure-table tbody tr:hover{
+			color:green;
+		}
+		.pure-table tbody tr.highlighted td {
+    		color: green;
+			}
+		

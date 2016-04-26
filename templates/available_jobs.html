@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Available Jobs</title>
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+	        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.js"></script>
+	            <script type="text/javascript" src="{{url_for('static',filename='jquery.min.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='font.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='tables.css') }}" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+	<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+</head>
+<body>
+	
+	<!-- <div class="redBox"></div> -->
+	<!-- <table class="pure-table" style="color:black; position:absolute; left:200px;">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Building</th>
+            <th>Rating</th>
+            
+        </tr>
+        </thead>
+
+    <tbody>
+        <tr class="pure-table-odd" >
+            <td>1</td>
+            <td>John</td>
+            <td>Maulding</td>
+            <td>3</td>
+        </tr>
+
+        <tr>
+            <td>2</td>
+            <td>Sam</td>
+            <td>North Ave</td>
+            <td>4.5</td>
+        </tr>
+
+
+    </tbody> -->
+
+
+    <script type="text/javascript">
+    	var socket = io.connect('http://localhost:5000/');
+          var ref = new Firebase('https://gtfood.firebaseio.com/users');
+          var userRef = ref.child(getCookie("uid"));
+          var ref_status_table = new Firebase("https://gtfood.firebaseio.com/status_table");
+          var userRef_status_table = ref_status_table.child(getCookie("uid")); 
+                socket.on("connect", function () {  
+            console.log("Connected!");
+        });
+
+    var new_ref = new Firebase("https://gtfood.firebaseio.com/status_table").child(getCookie("uid")).child("status");
+    	$(document).ready(function(){
+
+    		console.log("BEFORE VAR TABLE");
+    		var table = document.createElement('table');
+    		// table.id = "my-table"
+    		
+
+
+
+
+
+
+
+    		var isInitial = true;
+
+    		ref_status_table.on('value', function(snapshot) {
+    			// $('#my-table')[0].remove()
+    			if(!isInitial)
+    				rChild();
+    			console.log("POPULATING");
+    			isInitial = false
+
+    		// var table = document.createElement('table');
+    		table.id = "my-table"
+    		table.style = "position:absolute; left:200px;"
+    		table.className = "mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"
+    		console.log("AFTER VAR TABLE");
+
+
+			var tr = document.createElement('tr')
+			var headers = ["Orderer Name", "Restaurant", "Delivery Location", "Delivery Fee", "Orderer Rating", "Food Items", "UID"];
+			for (var i = 0; i < headers.length; i++) {
+				var th = document.createElement('th');
+				th.className = "mdl-data-table__cell--non-numeric";
+				console.log(headers[i]);
+				var textNode = document.createTextNode(headers[i]);
+				th.appendChild(textNode);
+    			tr.appendChild(th);
+			}
+
+			table.appendChild(tr);
+    			var big_dict = snapshot.val()
+    			console.log(big_dict)
+    			var array = [];
+    			var uid_array = [];
+    			for (var uid in big_dict) {
+    				var small_dict = big_dict[uid];
+    				uid_array.push(uid);
+    				if (small_dict["status"] == "O") {
+    					array.push(small_dict);
+    				}
+    			}
+    			console.log(array)
+
+    			for (var i = 0; i < array.length; i++) {
+    				var d = array[i];
+    				var tr = document.createElement('tr');   
+
+				    var td1 = document.createElement('td');
+				    var td2 = document.createElement('td');
+				    var td3 = document.createElement('td');
+				    var td4 = document.createElement('td');
+				    var td5 = document.createElement('td');
+				    var td6 = document.createElement('td');
+				    var td7 = document.createElement('td');
+
+				    var ordererName = document.createTextNode(d['ordererName']);
+				    var restaurant = document.createTextNode(d['restaurant']);
+				    var deliveryLocation = document.createTextNode(d['deliveryLocation']);
+				    var deliveryFee = document.createTextNode(d['deliveryFee']);
+				    var ordererRating = document.createTextNode(d['ordererRating']);
+				    var uid = document.createTextNode(uid_array[i])
+
+				    var string = "";
+				    for (var j = 0; j < d['foodItems'].length; j++) {
+				    	if (j < d['foodItems'].length - 1) {
+				    		string += (d['foodItems'][j] + ", ");
+				    	} else {
+				    		string += d['foodItems'][j];
+				    	}
+				    }
+				    var foodItems = document.createTextNode(string);
+
+
+				    td1.appendChild(ordererName);
+				    td2.appendChild(restaurant);
+				    td3.appendChild(deliveryLocation);
+					td4.appendChild(deliveryFee);
+					td5.appendChild(ordererRating);
+					td6.appendChild(foodItems);
+					td7.appendChild(uid);
+
+					td1.className="mdl-data-table__cell--non-numeric"
+					td2.className="mdl-data-table__cell--non-numeric"
+					td3.className="mdl-data-table__cell--non-numeric"
+					td4.className="mdl-data-table__cell--non-numeric"
+					td5.className="mdl-data-table__cell--non-numeric"
+					td6.className="mdl-data-table__cell--non-numeric"
+					td7.className="mdl-data-table__cell--non-numeric"
+
+
+				    tr.appendChild(td1);
+				    tr.appendChild(td2);
+				    tr.appendChild(td3);
+				    tr.appendChild(td4);
+				    tr.appendChild(td5);
+				    tr.appendChild(td6);
+				    tr.appendChild(td7);
+
+				    tr.id = i;
+
+				    tr.onclick = function () {
+				    	this_id = this.id
+				    	userRef.once('value', function(snap) {
+				    		snapshot_dict = snap.val()
+				    		if (snapshot_dict["customer_stripe_id"] != "notSet") {
+				    			console.log(this_id)
+				    			ref_status_table.child(uid_array[this_id]).update({'delivererUID': getCookie('uid')})
+				    			console.log("DELIVERER UID ADDED")
+
+				    		} else {
+				    			console.log("GOING TO ADD CARD")
+				    			window.location.href= "/stripe_deliverer/" + getCookie("token")
+				    		}
+				    	});
+				    	
+				    };
+
+				    table.appendChild(tr);
+    			}
+				document.body.appendChild(table);
+
+
+
+    		});
+
+
+    	})
+    		
+    	function rChild()
+    	{
+    		location.reload()
+    	}
+    	
+    	function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                console.log(ca[i])
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>        
+	
+</body>
+</html>

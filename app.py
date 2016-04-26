@@ -101,6 +101,12 @@ def delivery_on_way(token):
 	else:
 		return "IN delivery on way"
 
+@app.route('/stripe_deliverer/<token>')
+def stripe_deliverer(token):
+	if token in authenticated_tokens:
+		return render_template("stripe_deliverer.html")
+	else:
+		return "IN STRIPE DELIVERER"
 
 @app.route('/menu/<token>')
 def menu(token):

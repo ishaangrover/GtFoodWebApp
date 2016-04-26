@@ -139,7 +139,7 @@
               console.log("Successfully created user account with uid:", userData.uid);
               var uid = userData.uid.toString();
               var dict = {};
-              dict[uid] = {"email": username, "name": name, "uid":uid, "status": "N", "rating":5};
+              dict[uid] = {"email": username, "name": name, "uid":uid, "status": "N", "rating":5, "customer_stripe_id": "notSet"};
               ref.update(dict);
               loginUser(username, password);
             }
